@@ -1,4 +1,3 @@
-// import './App.css';
 import {useState} from "react";
 
 const operandVariants = ['+', '-', '*']
@@ -25,7 +24,8 @@ function App() {
   const [answer, setAnswer] = useState()
   const [resolution, setResolution] = useState()
   const [result, setResult] = useState(calculate(n1Initial, n2Initial, operandInitial))
-
+  let countCorrect = 0
+  let countIncorrect = 0
   const shake = () => {
     const n1 = getRandomNumber(), n2 = getRandomNumber(), operand = getRandomOperand()
     setN1(n1)
@@ -36,12 +36,13 @@ function App() {
   const check = () => {
     if (answer === result) {
       setResolution( 'Correct')
+      countCorrect++
     } else {
       setResolution( 'Incorrect')
+      countIncorrect++
     }
     shake()
     setAnswer('')
-
   }
   return (
     <div className="App">
@@ -55,6 +56,21 @@ function App() {
       <button onClick={shake}>Shake</button>
       <hr/>
       {result}
+      <hr/>
+      <table>
+        <tr>
+          <div>
+            <td>CORRECT</td>
+            <td>{countCorrect++}</td>
+          </div>
+        </tr>
+        <tr>
+          <div>
+            <td>INCORRECT</td>
+            <td>{countIncorrect++}</td>
+          </div>
+        </tr>
+      </table>
     </div>
   );
 }
