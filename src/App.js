@@ -13,6 +13,16 @@ const calculate = (n1, n2, operand) => {
   if (operand === '-') return n1 - n2
   if (operand === '*') return n1 * n2
 }
+const initialCounters = [
+  {
+    id: "pass",
+    value: 0
+  },
+  {
+    id: "fail",
+    value: 0
+  }
+]
 function App() {
   const n1Initial = getRandomNumber()
   const n2Initial = getRandomNumber()
@@ -24,9 +34,8 @@ function App() {
   const [answer, setAnswer] = useState()
   const [resolution, setResolution] = useState()
   const [result, setResult] = useState(calculate(n1Initial, n2Initial, operandInitial))
-  let countCorrect = 0
-  let countIncorrect = 0
-  const shake = () => {
+  const [counts, setCounts] = useState(initialCounters)
+   const shake = () => {
     const n1 = getRandomNumber(), n2 = getRandomNumber(), operand = getRandomOperand()
     setN1(n1)
     setN2(n2)
@@ -35,14 +44,22 @@ function App() {
   }
   const check = () => {
     if (answer === result) {
-      setResolution( 'Correct')
-      countCorrect++
+      setResolution('Correct')
+        countCorrect('pass')
     } else {
       setResolution( 'Incorrect')
-      countIncorrect++
+        countIncorrect('fail')
     }
     shake()
     setAnswer('')
+  }
+    const countCorrect = (id) => {
+    const countNew = counts.map(el => el.id === id ? {...el, value: el.value + 1}: el)
+    setCounts(countNew)
+  }
+  const countIncorrect = (id) => {
+    const countNew = counts.map(el => el.id === id ? {...el, value: el.value + 1}: el)
+    setCounts(countNew)
   }
   return (
     <div className="App">
@@ -57,22 +74,18 @@ function App() {
       <hr/>
       {result}
       <hr/>
-      <table>
+      <table border={5}>
         <tr>
-          <div>
-            <td>CORRECT</td>
-            <td>{countCorrect++}</td>
-          </div>
+            <td bgcolor={'#00ff2a'}>CORRECT</td>
+            <td bgcolor={'#ff1e00'}>INCORRECT</td>
         </tr>
         <tr>
-          <div>
-            <td>INCORRECT</td>
-            <td>{countIncorrect++}</td>
-          </div>
+          <td bgcolor={'#00ff2a'} key={countCorrect.id} ></td>
+          <td bgcolor={'#ff1e00'} key={countIncorrect.id} ></td>
         </tr>
-      </table>
-    </div>
-  );
+        </table>
+      </div>
+  )
 }
 
 export default App;
